@@ -122,9 +122,10 @@
                 $message->reply_markup = (object) array("inline_keyboard" => [[
                     (object) array(
                         "text" => "Send an inline query",
-                        "switch_inline_query" => " "
+                        "switch_inline_query" => ""
                     )
                 ]]);
+                $message->disable_web_page_preview = true;
             break;
             default:
                 $text = BTTB_convertBetweenTextAndBinary($update->message->text);
