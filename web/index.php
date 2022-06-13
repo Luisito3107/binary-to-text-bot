@@ -67,7 +67,7 @@
             foreach ($characters as $character) {
                 $data = unpack("H*", $character);
                 $conversion = base_convert($data[1], 16, 2);
-                for ($i=0; $i < 7-strlen($conversion); $i++) { 
+                for ($i=0; $i < 8-strlen($conversion); $i++) { 
                     $conversion = "0".$conversion;
                 }
                 $binary[] = $conversion;
