@@ -66,7 +66,11 @@
             $binary = [];
             foreach ($characters as $character) {
                 $data = unpack("H*", $character);
-                $binary[] = base_convert($data[1], 16, 2);
+                $conversion = base_convert($data[1], 16, 2);
+                for ($i=0; $i < 7-strlen($conversion); $i++) { 
+                    $conversion = "0".$conversion;
+                }
+                $binary[] = $conversion;
             }
         
             return implode(" ", $binary);    
@@ -139,13 +143,14 @@
         $conversion_result = BTTB_convertBetweenTextAndBinary($inline_query_query);
 
         $InputTextMessageContent = (object) array();
-        $InputTextMessageContent->message_text = (strlen($conversion_result) > 4096 ? "Result is too long to be sent this way." : $conversion_result);
+        $InputTextMessageContent->message_text = (strlen($conversion_result) > 4096 ? "Result is too long to be sent this way" : $conversion_result);
 
         $InlineQueryResultArticle = (object) array();
         $InlineQueryResultArticle->type = "article";
         $InlineQueryResultArticle->id = rand(1, 9999999);
-        $InlineQueryResultArticle->title = "Conversion ".(strlen($conversion_result) > 4096 ? "error" : "result");
+        $InlineQueryResultArticle->title = (strlen($conversion_result) > 4096 ? "❌ Conversion error" : "✅ Conversion result");
         $InlineQueryResultArticle->input_message_content = $InputTextMessageContent;
+        $InlineQueryResultArticle->description = substr($InputTextMessageContent->message_text, 0, min(61, strlen($InputTextMessageContent->message_text)))."...";
 
         $answerInlineQuery = (object) array();
         $answerInlineQuery->inline_query_id = $inline_query_id;
