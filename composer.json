@@ -1,0 +1,9 @@
+{
+    "name": "luisito3107/binary-to-text-bot",
+    "description": "A simple PHP bot for Telegram to convert between binary and ASCII text.",
+    "homepage": "https://github.com/Luisito3107/binary-to-text-bot",
+    "type": "project",
+    "require-dev": {
+        "heroku/heroku-buildpack-php": "*"
+    }
+}
