@@ -111,20 +111,26 @@
 
         if ($update->message->from->is_bot) die();
         
+        $message = (object) array();
 
         switch($update->message->text) {
             case "/start":
                 $text = "👋 <strong>Welcome, ".$username."!</strong>\n";
                 $text .= "This simple bot will convert between binary and ASCII text. Just send a text and the bot will reply with the binary string, or send a binary string and the bot will reply the ASCII text string.";
-                $text .= "\n\nYou can also use inline queries to convert up to 256 characters from the text field in any chat.";
+                $text .= "\n\nYou can also use inline queries to convert up to 256 characters from the text field in any chat if the result doesn't exceed 4096 characters (due to Telegram limitations).";
+                $text .= "\n\n🤖 Check this bot GitHub repository at https://github.com/Luisito3107/binary-to-text-bot";
+                $message->reply_markup = (object) array("inline_keyboard" => [[
+                    (object) array(
+                        "text" => "Send an inline query",
+                        "switch_inline_query" => " "
+                    )
+                ]]);
             break;
             default:
                 $text = BTTB_convertBetweenTextAndBinary($update->message->text);
             break;
         }
-
-
-        $message = (object) array();
+        
         $message->chat_id = $chatid;
         $message->text = $text;
         $message->parse_mode = "HTML";
@@ -156,5 +162,6 @@
         $answerInlineQuery->inline_query_id = $inline_query_id;
         $answerInlineQuery->results = [$InlineQueryResultArticle];
         $answerInlineQuery->is_personal = true;
+        $answerInlineQuery->cache_time = 5;
         BTTB_action("answerInlineQuery", $answerInlineQuery);
     }
